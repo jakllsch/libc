@@ -1,11 +1,3 @@
-#[cfg(target_pointer_width = "32")]
-    pub type c_long = i32;
-#[cfg(target_pointer_width = "32")]
-    pub type c_ulong = u32;
-#[cfg(target_pointer_width = "64")]
-    pub type c_long = i64;
-#[cfg(target_pointer_width = "64")]
-    pub type c_ulong = u64;
 pub type time_t = i64;
 pub type mode_t = u32;
 pub type nlink_t = ::uint32_t;

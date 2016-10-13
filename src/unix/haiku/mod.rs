@@ -405,6 +405,8 @@ pub const SIGPIPE: ::c_int = 7;
 pub const SIGALRM: ::c_int = 14;
 pub const SIGTERM: ::c_int = 15;
 
+pub const EAI_SYSTEM: ::c_int = 11;
+
 pub const PROT_NONE: ::c_int = 0;
 pub const PROT_READ: ::c_int = 1;
 pub const PROT_WRITE: ::c_int = 2;
@@ -547,6 +549,8 @@ pub const IPV6_LEAVE_GROUP: ::c_int = 29;
 pub const IPV6_V6ONLY: ::c_int = 30;
 
 pub const SO_DEBUG: ::c_int = 0x00000004;
+
+pub const MSG_NOSIGNAL: ::c_int = 0x0800;
 
 pub const SHUT_RD: ::c_int = 0;
 pub const SHUT_WR: ::c_int = 1;

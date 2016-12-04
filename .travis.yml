@@ -87,7 +87,10 @@ matrix:
       rust: stable
     - os: linux
       env: TARGET=mips64-unknown-linux-gnuabi64
-      rust: nightly
+      rust: beta
+    - os: linux
+      env: TARGET=mips-unknown-linux-gnu
+      rust: beta
 
     # beta
     - os: linux
@@ -103,10 +106,6 @@ matrix:
       rust: nightly
     - os: osx
       env: TARGET=x86_64-apple-darwin
-      rust: nightly
-    - os: linux
-      env: TARGET=mips-unknown-linux-gnu
-      # not sure why this has to be nightly...
       rust: nightly
 
     # QEMU based targets that compile in an emulator

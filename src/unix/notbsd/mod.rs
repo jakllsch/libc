@@ -685,7 +685,7 @@ f! {
     }
 
     pub fn WIFSIGNALED(status: ::c_int) -> bool {
-        (status & 0x7f) + 1 >= 2
+        ((status & 0x7f) + 1) as i8 >= 2
     }
 
     pub fn WTERMSIG(status: ::c_int) -> ::c_int {
@@ -725,6 +725,7 @@ extern {
                            flags: ::c_int,
                            rqtp: *const ::timespec,
                            rmtp:  *mut ::timespec) -> ::c_int;
+    pub fn clock_settime(clk_id: clockid_t, tp: *const ::timespec) -> ::c_int;
     pub fn prctl(option: ::c_int, ...) -> ::c_int;
     pub fn pthread_getattr_np(native: ::pthread_t,
                               attr: *mut ::pthread_attr_t) -> ::c_int;
@@ -873,6 +874,7 @@ extern {
     pub fn ptsname_r(fd: ::c_int,
                      buf: *mut ::c_char,
                      buflen: ::size_t) -> ::c_int;
+    pub fn clearenv() -> ::c_int;
 }
 
 cfg_if! {

@@ -253,6 +253,7 @@ pub const RUSAGE_SELF: ::c_int = 0;
 pub const O_RDONLY: ::c_int = 0;
 pub const O_WRONLY: ::c_int = 1;
 pub const O_RDWR: ::c_int = 2;
+pub const O_TMPFILE: ::c_int = 0o20000000 | O_DIRECTORY;
 
 pub const SOCK_CLOEXEC: ::c_int = O_CLOEXEC;
 
@@ -436,6 +437,8 @@ pub const AF_INET6: ::c_int = 10;
 pub const AF_UNSPEC: ::c_int = 0;
 pub const AF_NETLINK: ::c_int = 16;
 pub const SOCK_RAW: ::c_int = 3;
+pub const IPPROTO_ICMP: ::c_int = 1;
+pub const IPPROTO_ICMPV6: ::c_int = 58;
 pub const IPPROTO_TCP: ::c_int = 6;
 pub const IPPROTO_IP: ::c_int = 0;
 pub const IPPROTO_IPV6: ::c_int = 41;
@@ -468,6 +471,7 @@ pub const IPV6_V6ONLY: ::c_int = 26;
 
 pub const SO_DEBUG: ::c_int = 1;
 
+pub const MSG_PEEK: ::c_int = 0x2;
 pub const MSG_NOSIGNAL: ::c_int = 0x4000;
 
 pub const SHUT_RD: ::c_int = 0;
@@ -623,6 +627,10 @@ pub const SI_LOAD_SHIFT: ::c_uint = 16;
 pub const SIGEV_SIGNAL: ::c_int = 0;
 pub const SIGEV_NONE: ::c_int = 1;
 pub const SIGEV_THREAD: ::c_int = 2;
+
+pub const P_ALL: idtype_t = 0;
+pub const P_PID: idtype_t = 1;
+pub const P_PGID: idtype_t = 2;
 
 f! {
     pub fn FD_CLR(fd: ::c_int, set: *mut fd_set) -> () {
@@ -851,6 +859,8 @@ extern {
                      buf: *mut ::c_char,
                      buflen: ::size_t) -> ::c_int;
     pub fn clearenv() -> ::c_int;
+    pub fn waitid(idtype: idtype_t, id: id_t, infop: *mut ::siginfo_t,
+                  options: ::c_int) -> ::c_int;
 }
 
 cfg_if! {

@@ -6,6 +6,7 @@ use std::env;
 
 fn main() {
     let target = env::var("TARGET").unwrap();
+    let aarch64 = target.contains("aarch64");
     let x86_64 = target.contains("x86_64");
     let windows = target.contains("windows");
     let mingw = target.contains("windows-gnu");
@@ -101,17 +102,21 @@ fn main() {
         cfg.header("poll.h");
         cfg.header("syslog.h");
         cfg.header("semaphore.h");
+        cfg.header("sys/statvfs.h");
     }
 
     if android {
+        if !aarch64 {
+            // time64_t is not define for aarch64
+            // If included it will generate the error 'Your time_t is already 64-bit'
+            cfg.header("time64.h");
+        }
         cfg.header("arpa/inet.h");
-        cfg.header("time64.h");
         cfg.header("xlocale.h");
         cfg.header("utmp.h");
     } else if !windows {
         cfg.header("glob.h");
         cfg.header("ifaddrs.h");
-        cfg.header("sys/statvfs.h");
         cfg.header("langinfo.h");
 
         if !openbsd && !freebsd && !dragonfly {
@@ -195,6 +200,7 @@ fn main() {
         cfg.header("pthread_np.h");
         cfg.header("sched.h");
         cfg.header("ufs/ufs/quota.h");
+        cfg.header("sys/jail.h");
     }
 
     if netbsd {
@@ -205,7 +211,6 @@ fn main() {
 
     if openbsd {
         cfg.header("ufs/ufs/quota.h");
-        cfg.header("rpcsvc/rex.h");
         cfg.header("pthread_np.h");
         cfg.header("sys/syscall.h");
     }

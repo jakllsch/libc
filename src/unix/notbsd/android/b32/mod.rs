@@ -1,3 +1,6 @@
+// The following definitions are correct for arm and i686,
+// but may be wrong for mips
+
 pub type c_long = i32;
 pub type c_ulong = u32;
 pub type mode_t = u16;
@@ -162,6 +165,9 @@ pub const __CPU_BITS: ::size_t = 32;
 pub const UT_LINESIZE: usize = 8;
 pub const UT_NAMESIZE: usize = 8;
 pub const UT_HOSTSIZE: usize = 16;
+
+pub const SIGSTKSZ: ::size_t = 8192;
+pub const MINSIGSTKSZ: ::size_t = 2048;
 
 extern {
     pub fn bind(socket: ::c_int, address: *const ::sockaddr,

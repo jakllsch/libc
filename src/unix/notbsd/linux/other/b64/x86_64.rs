@@ -6,6 +6,7 @@ pub type nlink_t = u64;
 pub type blksize_t = i64;
 pub type greg_t = i64;
 pub type suseconds_t = i64;
+pub type __u64 = ::c_ulonglong;
 
 s! {
     pub struct stat {
@@ -76,6 +77,68 @@ s! {
         pub _st: [_libc_fpxreg; 8],
         pub _xmm: [_libc_xmmreg; 16],
         __private: [u64; 12],
+    }
+
+    pub struct user_fpregs_struct {
+        pub cwd: ::c_ushort,
+        pub swd: ::c_ushort,
+        pub ftw: ::c_ushort,
+        pub fop: ::c_ushort,
+        pub rip: ::c_ulonglong,
+        pub rdp: ::c_ulonglong,
+        pub mxcsr: ::c_uint,
+        pub mxcr_mask: ::c_uint,
+        pub st_space: [::c_uint; 32],
+        pub xmm_space: [::c_uint; 64],
+        padding: [::c_uint; 24],
+    }
+
+    pub struct user_regs_struct {
+        pub r15: ::c_ulonglong,
+        pub r14: ::c_ulonglong,
+        pub r13: ::c_ulonglong,
+        pub r12: ::c_ulonglong,
+        pub rbp: ::c_ulonglong,
+        pub rbx: ::c_ulonglong,
+        pub r11: ::c_ulonglong,
+        pub r10: ::c_ulonglong,
+        pub r9: ::c_ulonglong,
+        pub r8: ::c_ulonglong,
+        pub rax: ::c_ulonglong,
+        pub rcx: ::c_ulonglong,
+        pub rdx: ::c_ulonglong,
+        pub rsi: ::c_ulonglong,
+        pub rdi: ::c_ulonglong,
+        pub orig_rax: ::c_ulonglong,
+        pub rip: ::c_ulonglong,
+        pub cs: ::c_ulonglong,
+        pub eflags: ::c_ulonglong,
+        pub rsp: ::c_ulonglong,
+        pub ss: ::c_ulonglong,
+        pub fs_base: ::c_ulonglong,
+        pub gs_base: ::c_ulonglong,
+        pub ds: ::c_ulonglong,
+        pub es: ::c_ulonglong,
+        pub fs: ::c_ulonglong,
+        pub gs: ::c_ulonglong,
+    }
+
+    pub struct user {
+        pub regs: user_regs_struct,
+        pub u_fpvalid: ::c_int,
+        pub i387: user_fpregs_struct,
+        pub u_tsize: ::c_ulonglong,
+        pub u_dsize: ::c_ulonglong,
+        pub u_ssize: ::c_ulonglong,
+        pub start_code: ::c_ulonglong,
+        pub start_stack: ::c_ulonglong,
+        pub signal: ::c_longlong,
+        __reserved: ::c_int,
+        pub u_ar0: *mut user_regs_struct,
+        pub u_fpstate: *mut user_fpregs_struct,
+        pub magic: ::c_ulonglong,
+        pub u_comm: [::c_char; 32],
+        pub u_debugreg: [::c_ulonglong; 8],
     }
 
     pub struct mcontext_t {
@@ -251,7 +314,6 @@ pub const SO_DETACH_FILTER: ::c_int = 27;
 pub const SO_GET_FILTER: ::c_int = SO_ATTACH_FILTER;
 pub const SO_PEERNAME: ::c_int = 28;
 pub const SO_TIMESTAMP: ::c_int = 29;
-pub const SCM_TIMESTAMP: ::c_int = SO_TIMESTAMP;
 pub const SO_ACCEPTCONN: ::c_int = 30;
 pub const SO_PEERSEC: ::c_int = 31;
 pub const SO_PASSSEC: ::c_int = 34;
@@ -325,8 +387,6 @@ pub const TIOCMBIS: ::c_ulong = 0x5416;
 pub const TIOCMBIC: ::c_ulong = 0x5417;
 pub const TIOCMSET: ::c_ulong = 0x5418;
 pub const TIOCCONS: ::c_ulong = 0x541D;
-
-pub const CLONE_NEWCGROUP: ::c_int = 0x02000000;
 
 pub const SFD_CLOEXEC: ::c_int = 0x080000;
 
@@ -402,6 +462,7 @@ pub const MCL_CURRENT: ::c_int = 0x0001;
 pub const MCL_FUTURE: ::c_int = 0x0002;
 
 pub const SIGSTKSZ: ::size_t = 8192;
+pub const MINSIGSTKSZ: ::size_t = 2048;
 pub const CBAUD: ::tcflag_t = 0o0010017;
 pub const TAB1: ::c_int = 0x00000800;
 pub const TAB2: ::c_int = 0x00001000;
@@ -442,6 +503,17 @@ pub const ISIG: ::tcflag_t = 0x00000001;
 pub const ICANON: ::tcflag_t = 0x00000002;
 pub const PENDIN: ::tcflag_t = 0x00004000;
 pub const NOFLSH: ::tcflag_t = 0x00000080;
+pub const CIBAUD: ::tcflag_t = 0o02003600000;
+pub const CBAUDEX: ::tcflag_t = 0o010000;
+pub const VSWTC: usize = 7;
+pub const OLCUC:  ::tcflag_t = 0o000002;
+pub const NLDLY:  ::tcflag_t = 0o000400;
+pub const CRDLY:  ::tcflag_t = 0o003000;
+pub const TABDLY: ::tcflag_t = 0o014000;
+pub const BSDLY:  ::tcflag_t = 0o020000;
+pub const FFDLY:  ::tcflag_t = 0o100000;
+pub const VTDLY:  ::tcflag_t = 0o040000;
+pub const XTABS:  ::tcflag_t = 0o014000;
 
 pub const B0: ::speed_t = 0o000000;
 pub const B50: ::speed_t = 0o000001;
@@ -511,4 +583,7 @@ extern {
                        argc: ::c_int, ...);
     pub fn swapcontext(uocp: *mut ucontext_t,
                        ucp: *const ucontext_t) -> ::c_int;
+    pub fn iopl(level: ::c_int) -> ::c_int;
+    pub fn ioperm(from: ::c_ulong, num: ::c_ulong,
+                  turn_on: ::c_int) -> ::c_int;
 }

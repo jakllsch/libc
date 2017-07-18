@@ -5,6 +5,7 @@ pub type wchar_t = i32;
 pub type nlink_t = u64;
 pub type blksize_t = i64;
 pub type suseconds_t = i64;
+pub type __u64 = ::c_ulong;
 
 s! {
     pub struct stat {
@@ -210,7 +211,6 @@ pub const SO_DETACH_FILTER: ::c_int = 27;
 pub const SO_GET_FILTER: ::c_int = SO_ATTACH_FILTER;
 pub const SO_PEERNAME: ::c_int = 28;
 pub const SO_TIMESTAMP: ::c_int = 29;
-pub const SCM_TIMESTAMP: ::c_int = SO_TIMESTAMP;
 pub const SO_ACCEPTCONN: ::c_int = 30;
 pub const SO_PEERSEC: ::c_int = 31;
 pub const SO_PASSSEC: ::c_int = 34;
@@ -285,8 +285,6 @@ pub const TIOCMBIC: ::c_ulong = 0x5417;
 pub const TIOCMSET: ::c_ulong = 0x5418;
 pub const TIOCCONS: ::c_ulong = 0x541D;
 
-pub const CLONE_NEWCGROUP: ::c_int = 0x02000000;
-
 pub const SFD_CLOEXEC: ::c_int = 0x080000;
 
 pub const NCCS: usize = 32;
@@ -342,6 +340,7 @@ pub const MCL_CURRENT: ::c_int = 0x2000;
 pub const MCL_FUTURE: ::c_int = 0x4000;
 
 pub const SIGSTKSZ: ::size_t = 0x4000;
+pub const MINSIGSTKSZ: ::size_t = 4096;
 pub const CBAUD: ::tcflag_t = 0xff;
 pub const TAB1: ::c_int = 0x400;
 pub const TAB2: ::c_int = 0x800;
@@ -382,6 +381,15 @@ pub const ISIG: ::tcflag_t = 0x80;
 pub const ICANON: ::tcflag_t = 0x100;
 pub const PENDIN: ::tcflag_t = 0x20000000;
 pub const NOFLSH: ::tcflag_t = 0x80000000;
+pub const VSWTC: usize = 9;
+pub const OLCUC:  ::tcflag_t = 0o000004;
+pub const NLDLY:  ::tcflag_t = 0o001400;
+pub const CRDLY:  ::tcflag_t = 0o030000;
+pub const TABDLY: ::tcflag_t = 0o006000;
+pub const BSDLY:  ::tcflag_t = 0o100000;
+pub const FFDLY:  ::tcflag_t = 0o040000;
+pub const VTDLY:  ::tcflag_t = 0o200000;
+pub const XTABS:  ::tcflag_t = 0o006000;
 
 pub const B0: ::speed_t = 0o000000;
 pub const B50: ::speed_t = 0o000001;

@@ -146,6 +146,11 @@ s! {
         __opaque: [u8; __PTHREAD_RWLOCK_SIZE__],
     }
 
+    pub struct pthread_rwlockattr_t {
+        __sig: ::c_long,
+        __opaque: [u8; __PTHREAD_RWLOCKATTR_SIZE__],
+    }
+
     pub struct siginfo_t {
         pub si_signo: ::c_int,
         pub si_errno: ::c_int,
@@ -261,6 +266,16 @@ s! {
         pub dqb_itime: ::uint32_t,
         pub dqb_id: ::uint32_t,
         pub dqb_spare: [::uint32_t; 4],
+    }
+
+    pub struct if_msghdr {
+        pub ifm_msglen: ::c_ushort,
+        pub ifm_version: ::c_uchar,
+        pub ifm_type: ::c_uchar,
+        pub ifm_addrs: ::c_int,
+        pub ifm_flags: ::c_int,
+        pub ifm_index: ::c_ushort,
+        pub ifm_data: if_data,
     }
 
     pub struct termios {
@@ -448,14 +463,8 @@ pub const _PC_PIPE_BUF: ::c_int = 6;
 pub const _PC_CHOWN_RESTRICTED: ::c_int = 7;
 pub const _PC_NO_TRUNC: ::c_int = 8;
 pub const _PC_VDISABLE: ::c_int = 9;
-pub const O_RDONLY: ::c_int = 0;
-pub const O_WRONLY: ::c_int = 1;
-pub const O_RDWR: ::c_int = 2;
-pub const O_APPEND: ::c_int = 8;
-pub const O_CREAT: ::c_int = 512;
-pub const O_EXCL: ::c_int = 2048;
-pub const O_NOCTTY: ::c_int = 131072;
-pub const O_TRUNC: ::c_int = 1024;
+pub const O_DSYNC: ::c_int = 0x400000;
+pub const O_NOCTTY: ::c_int = 0x20000;
 pub const O_CLOEXEC: ::c_int = 0x1000000;
 pub const O_DIRECTORY: ::c_int = 0x100000;
 pub const S_IFIFO: mode_t = 4096;
@@ -665,7 +674,11 @@ pub const F_ALLOCATEALL: ::c_uint = 0x04;
 pub const F_PEOFPOSMODE: ::c_int = 3;
 pub const F_VOLPOSMODE: ::c_int = 4;
 
-pub const O_ACCMODE: ::c_int = 3;
+pub const AT_FDCWD: ::c_int = -2;
+pub const AT_EACCESS: ::c_int = 0x0010;
+pub const AT_SYMLINK_NOFOLLOW: ::c_int = 0x0020;
+pub const AT_SYMLINK_FOLLOW: ::c_int = 0x0040;
+pub const AT_REMOVEDIR: ::c_int = 0x0080;
 
 pub const TIOCMODG: ::c_ulong = 0x40047403;
 pub const TIOCMODS: ::c_ulong = 0x80047404;
@@ -806,6 +819,8 @@ pub const _SC_XOPEN_UNIX: ::c_int = 115;
 pub const _SC_XOPEN_VERSION: ::c_int = 116;
 pub const _SC_XOPEN_XCU_VERSION: ::c_int = 121;
 
+pub const PTHREAD_PROCESS_PRIVATE: ::c_int = 2;
+pub const PTHREAD_PROCESS_SHARED: ::c_int = 1;
 pub const PTHREAD_CREATE_JOINABLE: ::c_int = 1;
 pub const PTHREAD_CREATE_DETACHED: ::c_int = 2;
 pub const PTHREAD_STACK_MIN: ::size_t = 8192;
@@ -884,6 +899,10 @@ pub const AF_PPP: ::c_int = 34;
 pub const pseudo_AF_HDRCMPLT: ::c_int = 35;
 #[doc(hidden)]
 pub const AF_MAX: ::c_int = 40;
+pub const AF_SYS_CONTROL: ::c_int = 2;
+
+pub const SYSPROTO_EVENT: ::c_int = 1;
+pub const SYSPROTO_CONTROL: ::c_int = 2;
 
 pub const PF_UNSPEC: ::c_int = AF_UNSPEC;
 pub const PF_LOCAL: ::c_int = AF_LOCAL;
@@ -941,13 +960,6 @@ pub const SOCK_DGRAM: ::c_int = 2;
 pub const SOCK_RAW: ::c_int = 3;
 pub const SOCK_RDM: ::c_int = 4;
 pub const SOCK_SEQPACKET: ::c_int = 5;
-pub const IPPROTO_ICMP: ::c_int = 1;
-pub const IPPROTO_ICMPV6: ::c_int = 58;
-pub const IPPROTO_TCP: ::c_int = 6;
-pub const IPPROTO_IP: ::c_int = 0;
-pub const IPPROTO_IPV6: ::c_int = 41;
-pub const IP_MULTICAST_TTL: ::c_int = 10;
-pub const IP_MULTICAST_LOOP: ::c_int = 11;
 pub const IP_TTL: ::c_int = 4;
 pub const IP_HDRINCL: ::c_int = 2;
 pub const IP_ADD_MEMBERSHIP: ::c_int = 12;
@@ -970,6 +982,7 @@ pub const SO_LINGER: ::c_int = 0x0080;
 pub const SO_OOBINLINE: ::c_int = 0x0100;
 pub const SO_REUSEPORT: ::c_int = 0x0200;
 pub const SO_TIMESTAMP: ::c_int = 0x0400;
+pub const SO_TIMESTAMP_MONOTONIC: ::c_int = 0x0800;
 pub const SO_DONTTRUNC: ::c_int = 0x2000;
 pub const SO_WANTMORE: ::c_int = 0x4000;
 pub const SO_WANTOOBFLAG: ::c_int = 0x8000;
@@ -981,11 +994,17 @@ pub const SO_SNDTIMEO: ::c_int = 0x1005;
 pub const SO_RCVTIMEO: ::c_int = 0x1006;
 pub const SO_ERROR: ::c_int = 0x1007;
 pub const SO_TYPE: ::c_int = 0x1008;
+pub const SO_LABEL: ::c_int = 0x1010;
+pub const SO_PEERLABEL: ::c_int = 0x1011;
 pub const SO_NREAD: ::c_int = 0x1020;
 pub const SO_NKE: ::c_int = 0x1021;
 pub const SO_NOSIGPIPE: ::c_int = 0x1022;
 pub const SO_NOADDRERR: ::c_int = 0x1023;
 pub const SO_NWRITE: ::c_int = 0x1024;
+pub const SO_REUSESHAREUID: ::c_int = 0x1025;
+pub const SO_NOTIFYCONFLICT: ::c_int = 0x1026;
+pub const SO_RANDOMPORT: ::c_int = 0x1082;
+pub const SO_NP_EXTENSIONS: ::c_int = 0x1083;
 
 pub const MSG_OOB: ::c_int =  0x1;
 pub const MSG_PEEK: ::c_int = 0x2;
@@ -1003,7 +1022,6 @@ pub const MSG_HAVEMORE: ::c_int = 0x2000;
 pub const MSG_RCVMORE: ::c_int = 0x4000;
 // pub const MSG_COMPAT: ::c_int = 0x8000;
 
-pub const SCM_RIGHTS: ::c_int = 0x01;
 pub const SCM_TIMESTAMP: ::c_int = 0x02;
 pub const SCM_CREDS: ::c_int = 0x03;
 
@@ -1017,10 +1035,6 @@ pub const LOCK_SH: ::c_int = 1;
 pub const LOCK_EX: ::c_int = 2;
 pub const LOCK_NB: ::c_int = 4;
 pub const LOCK_UN: ::c_int = 8;
-
-pub const O_DSYNC: ::c_int = 4194304;
-pub const O_SYNC: ::c_int = 128;
-pub const O_NONBLOCK: ::c_int = 4;
 
 pub const MAP_COPY: ::c_int = 0x0002;
 pub const MAP_RENAME: ::c_int = 0x0020;
@@ -1231,6 +1245,18 @@ pub const NOTE_BACKGROUND: ::uint32_t = 0x00000040;
 pub const NOTE_TRACK: ::uint32_t = 0x00000001;
 pub const NOTE_TRACKERR: ::uint32_t = 0x00000002;
 pub const NOTE_CHILD: ::uint32_t = 0x00000004;
+
+pub const OCRNL: ::c_int = 0x00000010;
+pub const ONOCR: ::c_int = 0x00000020;
+pub const ONLRET: ::c_int = 0x00000040;
+pub const OFILL: ::c_int = 0x00000080;
+pub const NLDLY: ::c_int = 0x00000300;
+pub const TABDLY: ::c_int = 0x00000c04;
+pub const CRDLY: ::c_int = 0x00003000;
+pub const FFDLY: ::c_int = 0x00004000;
+pub const BSDLY: ::c_int = 0x00008000;
+pub const VTDLY: ::c_int = 0x00010000;
+pub const OFDEL: ::c_int = 0x00020000;
 
 pub const NL0: ::c_int  = 0x00000000;
 pub const NL1: ::c_int  = 0x00000100;
@@ -1475,11 +1501,6 @@ pub const CTL_DEBUG_NAME: ::c_int = 0;
 pub const CTL_DEBUG_VALUE: ::c_int = 1;
 pub const CTL_DEBUG_MAXID: ::c_int = 20;
 
-pub const POLLRDNORM: ::c_short = 0x040;
-pub const POLLWRNORM: ::c_short = 0x004;
-pub const POLLRDBAND: ::c_short = 0x080;
-pub const POLLWRBAND: ::c_short = 0x100;
-
 pub const PRIO_DARWIN_THREAD: ::c_int = 3;
 pub const PRIO_DARWIN_PROCESS: ::c_int = 4;
 pub const PRIO_DARWIN_BG: ::c_int = 0x1000;
@@ -1509,6 +1530,16 @@ pub const WNOWAIT: ::c_int = 0x00000020;
 pub const P_ALL: idtype_t = 0;
 pub const P_PID: idtype_t = 1;
 pub const P_PGID: idtype_t = 2;
+
+pub const XATTR_NOFOLLOW: ::c_int = 0x0001;
+pub const XATTR_CREATE: ::c_int = 0x0002;
+pub const XATTR_REPLACE: ::c_int = 0x0004;
+pub const XATTR_NOSECURITY: ::c_int = 0x0008;
+pub const XATTR_NODEFAULT: ::c_int = 0x0010;
+pub const XATTR_SHOWCOMPRESSION: ::c_int = 0x0020;
+
+pub const NET_RT_IFLIST2: ::c_int = 0x0006;
+pub const RTM_IFINFO2: ::c_int = 0x0012;
 
 f! {
     pub fn WSTOPSIG(status: ::c_int) -> ::c_int {
@@ -1545,6 +1576,8 @@ extern {
     pub fn aio_cancel(fd: ::c_int, aiocbp: *mut aiocb) -> ::c_int;
     pub fn lio_listio(mode: ::c_int, aiocb_list: *const *mut aiocb,
                       nitems: ::c_int, sevp: *mut sigevent) -> ::c_int;
+
+    pub fn dirfd(dirp: *mut ::DIR) -> ::c_int;
 
     pub fn lutimes(file: *const ::c_char, times: *const ::timeval) -> ::c_int;
 
@@ -1600,6 +1633,10 @@ extern {
                                         pshared: ::c_int) -> ::c_int;
     pub fn pthread_mutexattr_getpshared(attr: *const pthread_mutexattr_t,
                                         pshared: *mut ::c_int) -> ::c_int;
+    pub fn pthread_rwlockattr_getpshared(attr: *const pthread_rwlockattr_t,
+                                         val: *mut ::c_int) -> ::c_int;
+    pub fn pthread_rwlockattr_setpshared(attr: *mut pthread_rwlockattr_t,
+                                         val: ::c_int) -> ::c_int;
     pub fn __error() -> *mut ::c_int;
     pub fn backtrace(buf: *mut *mut ::c_void,
                      sz: ::c_int) -> ::c_int;
@@ -1659,32 +1696,26 @@ extern {
     pub fn getpriority(which: ::c_int, who: ::id_t) -> ::c_int;
     pub fn setpriority(which: ::c_int, who: ::id_t, prio: ::c_int) -> ::c_int;
 
-    pub fn openat(dirfd: ::c_int, pathname: *const ::c_char,
-                  flags: ::c_int, ...) -> ::c_int;
-    pub fn faccessat(dirfd: ::c_int, pathname: *const ::c_char,
-                     mode: ::c_int, flags: ::c_int) -> ::c_int;
-    pub fn fchmodat(dirfd: ::c_int, pathname: *const ::c_char,
-                    mode: ::mode_t, flags: ::c_int) -> ::c_int;
-    pub fn fchownat(dirfd: ::c_int, pathname: *const ::c_char,
-                    owner: ::uid_t, group: ::gid_t,
+    pub fn getxattr(path: *const ::c_char, name: *const ::c_char,
+                    value: *mut ::c_void, size: ::size_t, position: u32,
+                    flags: ::c_int) -> ::ssize_t;
+    pub fn fgetxattr(filedes: ::c_int, name: *const ::c_char,
+                     value: *mut ::c_void, size: ::size_t, position: u32,
+                     flags: ::c_int) -> ::ssize_t;
+    pub fn setxattr(path: *const ::c_char, name: *const ::c_char,
+                    value: *const ::c_void, size: ::size_t, position: u32,
                     flags: ::c_int) -> ::c_int;
-    #[cfg_attr(target_os = "macos", link_name = "fstatat$INODE64")]
-    pub fn fstatat(dirfd: ::c_int, pathname: *const ::c_char,
-                   buf: *mut stat, flags: ::c_int) -> ::c_int;
-    pub fn linkat(olddirfd: ::c_int, oldpath: *const ::c_char,
-                  newdirfd: ::c_int, newpath: *const ::c_char,
-                  flags: ::c_int) -> ::c_int;
-   pub fn mkdirat(dirfd: ::c_int, pathname: *const ::c_char,
-                  mode: ::mode_t) -> ::c_int;
-   pub fn readlinkat(dirfd: ::c_int, pathname: *const ::c_char,
-                     buf: *mut ::c_char, bufsiz: ::size_t) -> ::ssize_t;
-   pub fn renameat(olddirfd: ::c_int, oldpath: *const ::c_char,
-                   newdirfd: ::c_int, newpath: *const ::c_char)
-                   -> ::c_int;
-   pub fn symlinkat(target: *const ::c_char, newdirfd: ::c_int,
-                    linkpath: *const ::c_char) -> ::c_int;
-   pub fn unlinkat(dirfd: ::c_int, pathname: *const ::c_char,
-                   flags: ::c_int) -> ::c_int;
+    pub fn fsetxattr(filedes: ::c_int, name: *const ::c_char,
+                     value: *const ::c_void, size: ::size_t, position: u32,
+                     flags: ::c_int) -> ::c_int;
+    pub fn listxattr(path: *const ::c_char, list: *mut ::c_char,
+                     size: ::size_t, flags: ::c_int) -> ::ssize_t;
+    pub fn flistxattr(filedes: ::c_int, list: *mut ::c_char,
+                      size: ::size_t, flags: ::c_int) -> ::ssize_t;
+    pub fn removexattr(path: *const ::c_char, name: *const ::c_char,
+                       flags: ::c_int) -> ::c_int;
+    pub fn fremovexattr(filedes: ::c_int, name: *const ::c_char,
+                        flags: ::c_int) -> ::c_int;
 
     pub fn initgroups(user: *const ::c_char, basegroup: ::c_int) -> ::c_int;
 
@@ -1692,7 +1723,9 @@ extern {
                link_name = "waitid$UNIX2003")]
     pub fn waitid(idtype: idtype_t, id: id_t, infop: *mut ::siginfo_t,
                   options: ::c_int) -> ::c_int;
-
+    pub fn brk(addr: *const ::c_void) -> *mut ::c_void;
+    pub fn sbrk(increment: ::c_int) -> *mut ::c_void;
+    pub fn settimeofday(tv: *const ::timeval, tz: *const ::timezone) -> ::c_int;
 }
 
 cfg_if! {

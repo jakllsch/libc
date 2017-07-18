@@ -105,13 +105,20 @@ case "$TARGET" in
 esac
 
 case "$TARGET" in
+  # Android emulator for x86_64 does not work on travis (missing hardware
+  # acceleration). Tests are run on case *). See ci/android-sysimage.sh for
+  # informations about how tests are run.
   arm-linux-androideabi | aarch64-linux-android | i686-linux-android)
     # set SHELL so android can detect a 64bits system, see
     # http://stackoverflow.com/a/41789144
     # https://issues.jenkins-ci.org/browse/JENKINS-26930?focusedCommentId=230791&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-230791
     export SHELL=/bin/dash
     arch=$(echo $TARGET | cut -d- -f1)
-    emulator @$arch -no-window -no-accel &
+    accel="-no-accel"
+    if emulator -accel-check; then
+      accel=""
+    fi
+    emulator @$arch -no-window $accel &
     adb wait-for-device
     adb push $CARGO_TARGET_DIR/$TARGET/debug/libc-test /data/local/tmp/libc-test
     adb shell /data/local/tmp/libc-test 2>&1 | tee /tmp/out
@@ -159,6 +166,11 @@ case "$TARGET" in
 
   aarch64-unknown-linux-gnu)
     qemu-aarch64 -L /usr/aarch64-linux-gnu/ $CARGO_TARGET_DIR/$TARGET/debug/libc-test
+    ;;
+
+  s390x-unknown-linux-gnu)
+    # TODO: in theory we should execute this, but qemu segfaults immediately :(
+    # qemu-s390x -L /usr/s390x-linux-gnu/ $CARGO_TARGET_DIR/$TARGET/debug/libc-test
     ;;
 
   *-rumprun-netbsd)

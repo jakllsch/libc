@@ -318,8 +318,8 @@ pub const PTHREAD_CREATE_DETACHED : ::c_int = 1;
 // http://netbsd.gw.com/cgi-bin/man-cgi?clock_gettime
 // https://github.com/jsonn/src/blob/HEAD/sys/kern/subr_time.c#L222
 // Basically the same goes for NetBSD
-pub const CLOCK_REALTIME: clockid_t = 0;
-pub const CLOCK_MONOTONIC: clockid_t = 3;
+pub const CLOCK_REALTIME: ::clockid_t = 0;
+pub const CLOCK_MONOTONIC: ::clockid_t = 3;
 
 pub const RLIMIT_CPU: ::c_int = 0;
 pub const RLIMIT_FSIZE: ::c_int = 1;
@@ -448,8 +448,6 @@ pub const MSG_MCAST: ::c_int = 0x200;
 pub const MSG_NOSIGNAL: ::c_int = 0x400;
 pub const MSG_CMSG_CLOEXEC: ::c_int = 0x800;
 
-pub const IFF_LOOPBACK: ::c_int = 0x8;
-
 pub const SHUT_RD: ::c_int = 0;
 pub const SHUT_WR: ::c_int = 1;
 pub const SHUT_RDWR: ::c_int = 2;
@@ -534,6 +532,21 @@ pub const CRTS_IFLOW: ::tcflag_t = CRTSCTS;
 pub const CCTS_OFLOW: ::tcflag_t = CRTSCTS;
 pub const OCRNL: ::tcflag_t = 0x10;
 
+pub const TIOCEXCL: ::c_ulong = 0x2000740d;
+pub const TIOCNXCL: ::c_ulong = 0x2000740e;
+pub const TIOCFLUSH: ::c_ulong = 0x80047410;
+pub const TIOCGETA: ::c_ulong = 0x402c7413;
+pub const TIOCSETA: ::c_ulong = 0x802c7414;
+pub const TIOCSETAW: ::c_ulong = 0x802c7415;
+pub const TIOCSETAF: ::c_ulong = 0x802c7416;
+pub const TIOCGETD: ::c_ulong = 0x4004741a;
+pub const TIOCSETD: ::c_ulong = 0x8004741b;
+pub const TIOCMGET: ::c_ulong = 0x4004746a;
+pub const TIOCMBIC: ::c_ulong = 0x8004746b;
+pub const TIOCMBIS: ::c_ulong = 0x8004746c;
+pub const TIOCMSET: ::c_ulong = 0x8004746d;
+pub const TIOCSTART: ::c_ulong = 0x2000746e;
+pub const TIOCSTOP: ::c_ulong = 0x2000746f;
 pub const TIOCM_LE: ::c_int = 0o0001;
 pub const TIOCM_DTR: ::c_int = 0o0002;
 pub const TIOCM_RTS: ::c_int = 0o0004;
@@ -565,11 +578,11 @@ extern {
     pub fn mincore(addr: *mut ::c_void, len: ::size_t,
                    vec: *mut ::c_char) -> ::c_int;
     #[cfg_attr(target_os = "netbsd", link_name = "__clock_getres50")]
-    pub fn clock_getres(clk_id: clockid_t, tp: *mut ::timespec) -> ::c_int;
+    pub fn clock_getres(clk_id: ::clockid_t, tp: *mut ::timespec) -> ::c_int;
     #[cfg_attr(target_os = "netbsd", link_name = "__clock_gettime50")]
-    pub fn clock_gettime(clk_id: clockid_t, tp: *mut ::timespec) -> ::c_int;
+    pub fn clock_gettime(clk_id: ::clockid_t, tp: *mut ::timespec) -> ::c_int;
     #[cfg_attr(target_os = "netbsd", link_name = "__clock_settime50")]
-    pub fn clock_settime(clk_id: clockid_t, tp: *const ::timespec) -> ::c_int;
+    pub fn clock_settime(clk_id: ::clockid_t, tp: *const ::timespec) -> ::c_int;
     pub fn __errno() -> *mut ::c_int;
     pub fn shm_open(name: *const ::c_char, oflag: ::c_int, mode: ::mode_t)
                     -> ::c_int;
@@ -589,6 +602,8 @@ extern {
                   iovcnt: ::c_int,
                   offset: ::off_t) -> ::ssize_t;
     pub fn futimens(fd: ::c_int, times: *const ::timespec) -> ::c_int;
+    pub fn utimensat(dirfd: ::c_int, path: *const ::c_char,
+                     times: *const ::timespec, flag: ::c_int) -> ::c_int;
     pub fn fdatasync(fd: ::c_int) -> ::c_int;
     pub fn openpty(amaster: *mut ::c_int,
                    aslave: *mut ::c_int,
@@ -611,11 +626,22 @@ extern {
     pub fn sem_timedwait(sem: *mut sem_t,
                          abstime: *const ::timespec) -> ::c_int;
     pub fn pthread_condattr_setclock(attr: *mut pthread_condattr_t,
-                                     clock_id: clockid_t) -> ::c_int;
+                                     clock_id: ::clockid_t) -> ::c_int;
     pub fn sethostname(name: *const ::c_char, len: ::size_t) -> ::c_int;
     pub fn pthread_mutex_timedlock(lock: *mut pthread_mutex_t,
                                    abstime: *const ::timespec) -> ::c_int;
     pub fn pipe2(fds: *mut ::c_int, flags: ::c_int) -> ::c_int;
+
+    pub fn getgrouplist(name: *const ::c_char,
+                        basegid: ::gid_t,
+                        groups: *mut ::gid_t,
+                        ngroups: *mut ::c_int) -> ::c_int;
+    pub fn initgroups(name: *const ::c_char, basegid: ::gid_t) -> ::c_int;
+    pub fn fexecve(fd: ::c_int, argv: *const *const ::c_char,
+                   envp: *const *const ::c_char)
+                   -> ::c_int;
+    pub fn getdomainname(name: *mut ::c_char, len: ::size_t) -> ::c_int;
+    pub fn setdomainname(name: *const ::c_char, len: ::size_t) -> ::c_int;
 }
 
 cfg_if! {

@@ -53,12 +53,12 @@ macro_rules! f {
         $($body:stmt);*
     })*) => ($(
         #[inline]
-        #[cfg(not(dox))]
+        #[cfg(not(cross_platform_docs))]
         pub unsafe extern fn $i($($arg: $argty),*) -> $ret {
             $($body);*
         }
 
-        #[cfg(dox)]
+        #[cfg(cross_platform_docs)]
         #[allow(dead_code)]
         pub unsafe extern fn $i($($arg: $argty),*) -> $ret {
             loop {}
@@ -68,41 +68,4 @@ macro_rules! f {
 
 macro_rules! __item {
     ($i:item) => ($i)
-}
-
-#[cfg(test)]
-mod tests {
-    cfg_if! {
-        if #[cfg(test)] {
-            use std::option::Option as Option2;
-            fn works1() -> Option2<u32> { Some(1) }
-        } else {
-            fn works1() -> Option<u32> { None }
-        }
-    }
-
-    cfg_if! {
-        if #[cfg(foo)] {
-            fn works2() -> bool { false }
-        } else if #[cfg(test)] {
-            fn works2() -> bool { true }
-        } else {
-            fn works2() -> bool { false }
-        }
-    }
-
-    cfg_if! {
-        if #[cfg(foo)] {
-            fn works3() -> bool { false }
-        } else {
-            fn works3() -> bool { true }
-        }
-    }
-
-    #[test]
-    fn it_works() {
-        assert!(works1().is_some());
-        assert!(works2());
-        assert!(works3());
-    }
 }

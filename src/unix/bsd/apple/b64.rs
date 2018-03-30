@@ -2,6 +2,7 @@
 
 pub type c_long = i64;
 pub type c_ulong = u64;
+pub type boolean_t = ::c_uint;
 
 s! {
     pub struct pthread_attr_t {
@@ -44,6 +45,13 @@ s! {
         pub ifi_hwassist: u32,
         pub ifi_reserved1: u32,
         pub ifi_reserved2: u32,
+    }
+
+    pub struct bpf_hdr {
+        pub bh_tstamp: ::timeval32,
+        pub bh_caplen: ::uint32_t,
+        pub bh_datalen: ::uint32_t,
+        pub bh_hdrlen: ::c_ushort,
     }
 }
 

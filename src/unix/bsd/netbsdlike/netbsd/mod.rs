@@ -293,7 +293,8 @@ s! {
     }
 
     pub struct sockcred {
-        pub sc_pid: ::pid_t,
+        // no sc_pid until 2016-04-06 19:45:46Z (NetBSD 7.99.27)
+        //pub sc_pid: ::pid_t,
         pub sc_uid: ::uid_t,
         pub sc_euid: ::uid_t,
         pub sc_gid: ::gid_t,
@@ -394,8 +395,10 @@ pub const TCP_KEEPINTVL: ::c_int = 5;
 pub const TCP_KEEPCNT:   ::c_int = 6;
 pub const TCP_KEEPINIT:  ::c_int = 7;
 
+/*
 pub const SOCK_CONN_DGRAM: ::c_int = 6;
 pub const SOCK_DCCP: ::c_int = SOCK_CONN_DGRAM;
+*/
 pub const SOCK_NOSIGPIPE: ::c_int = 0x40000000;
 pub const SOCK_FLAGS_MASK: ::c_int = 0xf0000000;
 
@@ -449,7 +452,7 @@ pub const IPPROTO_IDP: ::c_int = 22;
 /// tp-4 w/ class negotiation
 pub const IPPROTO_TP: ::c_int = 29;
 /// DCCP
-pub const IPPROTO_DCCP: ::c_int = 33;
+//pub const IPPROTO_DCCP: ::c_int = 33;
 // IPPROTO_IPV6 defined in src/unix/mod.rs
 /// IP6 routing header
 pub const IPPROTO_ROUTING: ::c_int = 43;
@@ -492,7 +495,7 @@ pub const IPPROTO_CARP: ::c_int = 112;
 // libc testing.
 //pub const IPPROTO_L2TP: ::c_int = 115;
 /// SCTP
-pub const IPPROTO_SCTP: ::c_int = 132;
+//pub const IPPROTO_SCTP: ::c_int = 132;
 /// PFSYNC
 pub const IPPROTO_PFSYNC: ::c_int = 240;
 pub const IPPROTO_MAX: ::c_int = 256;
@@ -531,10 +534,12 @@ pub const PF_MAX: ::c_int = AF_MAX;
 
 pub const MSG_NBIO: ::c_int = 0x1000;
 pub const MSG_WAITFORONE: ::c_int = 0x2000;
-pub const MSG_NOTIFICATION: ::c_int = 0x4000;
+//pub const MSG_NOTIFICATION: ::c_int = 0x4000;
 
+pub const SCM_CREDS: ::c_int = 0x04;
 pub const SCM_TIMESTAMP: ::c_int = 0x08;
-pub const SCM_CREDS: ::c_int = 0x10;
+// no sc_pid until 2016-04-06 19:45:46Z (NetBSD 7.99.27)
+//pub const SCM_CREDS: ::c_int = 0x10;
 
 pub const O_DSYNC : ::c_int = 0x10000;
 
@@ -543,6 +548,7 @@ pub const MAP_NORESERVE : ::c_int = 0x40;
 pub const MAP_HASSEMAPHORE : ::c_int = 0x200;
 pub const MAP_WIRED: ::c_int = 0x800;
 
+/*
 pub const DCCP_TYPE_REQUEST: ::c_int = 0;
 pub const DCCP_TYPE_RESPONSE: ::c_int = 1;
 pub const DCCP_TYPE_DATA: ::c_int = 2;
@@ -601,6 +607,7 @@ pub const DCCP_NDP_LIMIT: ::c_int = 16;
 pub const DCCP_SEQ_NUM_LIMIT: ::c_int = 16777216;
 pub const DCCP_MAX_OPTIONS: ::c_int = 32;
 pub const DCCP_MAX_PKTS: ::c_int = 100;
+*/
 
 pub const _PC_LINK_MAX : ::c_int = 1;
 pub const _PC_MAX_CANON : ::c_int = 2;
@@ -673,11 +680,13 @@ pub const _SC_2_PBS_MESSAGE : ::c_int = 84;
 pub const _SC_2_PBS_TRACK : ::c_int = 85;
 pub const _SC_SPAWN : ::c_int = 86;
 pub const _SC_SHARED_MEMORY_OBJECTS : ::c_int = 87;
+/*
 pub const _SC_TIMER_MAX : ::c_int = 88;
 pub const _SC_SEM_NSEMS_MAX : ::c_int = 89;
 pub const _SC_CPUTIME : ::c_int = 90;
 pub const _SC_THREAD_CPUTIME : ::c_int = 91;
 pub const _SC_DELAYTIMER_MAX : ::c_int = 92;
+*/
 // These two variables will be supported in NetBSD 8.0
 // pub const _SC_SIGQUEUE_MAX : ::c_int = 93;
 // pub const _SC_REALTIME_SIGNALS : ::c_int = 94;
@@ -920,7 +929,7 @@ pub const KERN_PROC_ARGV: ::c_int = 1;
 pub const KERN_PROC_NARGV: ::c_int = 2;
 pub const KERN_PROC_ENV: ::c_int = 3;
 pub const KERN_PROC_NENV: ::c_int = 4;
-pub const KERN_PROC_PATHNAME: ::c_int = 5;
+//pub const KERN_PROC_PATHNAME: ::c_int = 5;
 
 pub const EAI_AGAIN: ::c_int = 2;
 pub const EAI_BADFLAGS: ::c_int = 3;
@@ -947,14 +956,20 @@ pub const SIGEV_NONE: ::c_int = 0;
 pub const SIGEV_SIGNAL: ::c_int = 1;
 pub const SIGEV_THREAD: ::c_int = 2;
 
-pub const WSTOPPED: ::c_int = 0x00000002; // same as WUNTRACED
-pub const WCONTINUED: ::c_int = 0x00000010;
-pub const WEXITED: ::c_int = 0x000000020;
+// before 2016-04-02 11:18:26Z (NetBSD 7.99.26):
+pub const WSTOPPED: ::c_int = 0o177;
+// afterwards
+//pub const WSTOPPED: ::c_int = 0x00000002; // same as WUNTRACED
+// after 2016-04-02 20:38:40Z (NetBSD 7.99.26)
+//pub const WCONTINUED: ::c_int = 0x00000010;
+//pub const WEXITED: ::c_int = 0x000000020;
 pub const WNOWAIT: ::c_int = 0x00010000;
 
+/*
 pub const P_ALL: idtype_t = 0;
 pub const P_PID: idtype_t = 1;
 pub const P_PGID: idtype_t = 4;
+*/
 
 pub const B460800: ::speed_t = 460800;
 pub const B921600: ::speed_t = 921600;
@@ -977,6 +992,7 @@ f! {
         *(dirp as *const ::c_int)
     }
 
+    // after 2016-04-02 20:38:40Z (NetBSD 7.99.26)
     pub fn WIFCONTINUED(status: ::c_int) -> bool {
         status == 0xffff
     }
@@ -1003,7 +1019,7 @@ extern {
     pub fn aio_cancel(fd: ::c_int, aiocbp: *mut aiocb) -> ::c_int;
     pub fn lio_listio(mode: ::c_int, aiocb_list: *const *mut aiocb,
                       nitems: ::c_int, sevp: *mut sigevent) -> ::c_int;
-
+    #[link_name = "__lutimes50"]
     pub fn lutimes(file: *const ::c_char, times: *const ::timeval) -> ::c_int;
     pub fn getnameinfo(sa: *const ::sockaddr,
                        salen: ::socklen_t,
@@ -1055,11 +1071,13 @@ extern {
     pub fn mq_setattr(mqd: ::mqd_t,
                       newattr: *const ::mq_attr,
                       oldattr: *mut ::mq_attr) -> ::c_int;
+    #[link_name = "__mq_timedreceive50"]
     pub fn mq_timedreceive(mqd: ::mqd_t,
                            msg_ptr: *mut ::c_char,
                            msg_len: ::size_t,
                            msq_prio: *mut ::c_uint,
                            abs_timeout: *const ::timespec) -> ::ssize_t;
+    #[link_name = "__mq_timedsend50"]
     pub fn mq_timedsend(mqd: ::mqd_t,
                         msg_ptr: *const ::c_char,
                         msg_len: ::size_t,

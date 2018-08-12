@@ -320,7 +320,7 @@ fn main() {
         cfg.header("sys/ioctl_compat.h");
 
         // DCCP support
-        cfg.header("netinet/dccp.h");
+        //cfg.header("netinet/dccp.h");
     }
 
     if openbsd {

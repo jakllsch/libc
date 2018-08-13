@@ -1108,6 +1108,10 @@ extern {
     pub fn settimeofday(tv: *const ::timeval, tz: *const ::c_void) -> ::c_int;
 }
 
+#[link(name = "rt")]
+extern {
+}
+
 #[link(name = "util")]
 extern {
     #[cfg_attr(target_os = "netbsd", link_name = "__getpwent_r50")]

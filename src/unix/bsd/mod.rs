@@ -58,6 +58,8 @@ s! {
         pub ifa_netmask: *mut ::sockaddr,
         pub ifa_dstaddr: *mut ::sockaddr,
         pub ifa_data: *mut ::c_void,
+        #[cfg(target_os = "netbsd")] /* since NetBSD 7.99.39, 2016/09/21 10:50:23Z */
+        pub ifa_addrflags: ::c_uint,
     }
 
     pub struct fd_set {

@@ -516,10 +516,11 @@ pub const AF_MAX: ::c_int = 35;
 pub const NET_MAXID: ::c_int = AF_MAX;
 pub const NET_RT_DUMP: ::c_int = 1;
 pub const NET_RT_FLAGS: ::c_int = 2;
-pub const NET_RT_OOIFLIST: ::c_int = 3;
-pub const NET_RT_OIFLIST: ::c_int = 4;
-pub const NET_RT_IFLIST: ::c_int = 5;
-pub const NET_RT_MAXID: ::c_int = 6;
+pub const NET_RT_OOOIFLIST: ::c_int = 3;
+pub const NET_RT_OOIFLIST: ::c_int = 4;
+pub const NET_RT_OIFLIST: ::c_int = 5;
+pub const NET_RT_IFLIST: ::c_int = 6; /* since NetBSD 7.99.39, 2016/09/21 10:50:23Z */
+pub const NET_RT_MAXID: ::c_int = 7;
 
 pub const PF_OROUTE: ::c_int = AF_OROUTE;
 pub const PF_ARP: ::c_int = AF_ARP;

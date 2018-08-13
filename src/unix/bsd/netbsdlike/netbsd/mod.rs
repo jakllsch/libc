@@ -1110,6 +1110,10 @@ extern {
     pub fn dup3(src: ::c_int, dst: ::c_int, flags: ::c_int) -> ::c_int;
 }
 
+#[link(name = "rt")]
+extern {
+}
+
 #[link(name = "util")]
 extern {
     #[cfg_attr(target_os = "netbsd", link_name = "__getpwent_r50")]

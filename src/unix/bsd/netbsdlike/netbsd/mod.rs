@@ -534,14 +534,12 @@ pub const AF_CAN: ::c_int = 35;
 pub const AF_ETHER: ::c_int = 36;
 pub const AF_MAX: ::c_int = 37;
 
-pub const NET_MAXID: ::c_int = AF_MAX;
 pub const NET_RT_DUMP: ::c_int = 1;
 pub const NET_RT_FLAGS: ::c_int = 2;
 pub const NET_RT_OOOIFLIST: ::c_int = 3;
 pub const NET_RT_OOIFLIST: ::c_int = 4;
 pub const NET_RT_OIFLIST: ::c_int = 5;
 pub const NET_RT_IFLIST: ::c_int = 6; /* since NetBSD 7.99.39, 2016/09/21 10:50:23Z */
-pub const NET_RT_MAXID: ::c_int = 7;
 
 pub const PF_OROUTE: ::c_int = AF_OROUTE;
 pub const PF_ARP: ::c_int = AF_ARP;
@@ -859,7 +857,7 @@ pub const CTL_PROC: ::c_int = 10;
 pub const CTL_VENDOR: ::c_int = 11;
 pub const CTL_EMUL: ::c_int = 12;
 pub const CTL_SECURITY: ::c_int = 13;
-pub const CTL_MAXID: ::c_int = 14;
+
 pub const KERN_OSTYPE: ::c_int = 1;
 pub const KERN_OSRELEASE: ::c_int = 2;
 pub const KERN_OSREV: ::c_int = 3;
@@ -944,7 +942,7 @@ pub const KERN_ARND: ::c_int = 81;
 pub const KERN_SYSVIPC: ::c_int = 82;
 pub const KERN_BOOTTIME: ::c_int = 83;
 pub const KERN_EVCNT: ::c_int = 84;
-pub const KERN_MAXID: ::c_int = 85;
+
 pub const KERN_PROC_ALL: ::c_int = 0;
 pub const KERN_PROC_PID: ::c_int = 1;
 pub const KERN_PROC_PGRP: ::c_int = 2;

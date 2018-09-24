@@ -523,7 +523,9 @@ pub const AF_BLUETOOTH: ::c_int = 31;
 pub const AF_IEEE80211: ::c_int = 32;
 pub const AF_MPLS: ::c_int = 33;
 pub const AF_ROUTE: ::c_int = 34;
-pub const AF_MAX: ::c_int = 35;
+pub const AF_CAN: ::c_int = 35;
+pub const AF_ETHER: ::c_int = 36;
+pub const AF_MAX: ::c_int = 37;
 
 pub const NET_RT_DUMP: ::c_int = 1;
 pub const NET_RT_FLAGS: ::c_int = 2;
